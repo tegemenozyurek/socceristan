@@ -47,13 +47,6 @@ function App() {
 
   return (
     <>
-      <img
-        className="bg-ball"
-        src="/favicon.png"
-        alt=""
-        aria-hidden="true"
-      />
-
       <header className="site-header">
         <img className="brand-logo" src={logo} alt="socceristan" />
 
