@@ -1,16 +1,15 @@
 import { useState } from 'react'
+import logo from './assets/logo.png'
 import './App.css'
 
 type Lang = 'tr' | 'en'
 
 const copy = {
   tr: {
-    ready: 'React projesi hazır.',
     langTr: 'Türkçe',
     langEn: 'İngilizce',
   },
   en: {
-    ready: 'React project is ready.',
     langTr: 'Turkish',
     langEn: 'English',
   },
@@ -48,33 +47,39 @@ function App() {
 
   return (
     <>
-      <div className="lang-switch" role="group" aria-label="Language">
-        <button
-          type="button"
-          className={lang === 'tr' ? 'active' : undefined}
-          onClick={() => setLang('tr')}
-          aria-pressed={lang === 'tr'}
-          aria-label={t.langTr}
-          title={t.langTr}
-        >
-          <TurkishFlag />
-        </button>
-        <button
-          type="button"
-          className={lang === 'en' ? 'active' : undefined}
-          onClick={() => setLang('en')}
-          aria-pressed={lang === 'en'}
-          aria-label={t.langEn}
-          title={t.langEn}
-        >
-          <GbFlag />
-        </button>
-      </div>
+      <img
+        className="bg-ball"
+        src="/favicon.png"
+        alt=""
+        aria-hidden="true"
+      />
 
-      <main>
-        <h1>Socceristan</h1>
-        <p>{t.ready}</p>
-      </main>
+      <header className="site-header">
+        <img className="brand-logo" src={logo} alt="socceristan" />
+
+        <div className="lang-switch" role="group" aria-label="Language">
+          <button
+            type="button"
+            className={lang === 'tr' ? 'active' : undefined}
+            onClick={() => setLang('tr')}
+            aria-pressed={lang === 'tr'}
+            aria-label={t.langTr}
+            title={t.langTr}
+          >
+            <TurkishFlag />
+          </button>
+          <button
+            type="button"
+            className={lang === 'en' ? 'active' : undefined}
+            onClick={() => setLang('en')}
+            aria-pressed={lang === 'en'}
+            aria-label={t.langEn}
+            title={t.langEn}
+          >
+            <GbFlag />
+          </button>
+        </div>
+      </header>
     </>
   )
 }
