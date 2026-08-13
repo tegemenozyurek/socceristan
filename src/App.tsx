@@ -23,6 +23,87 @@ const ballColors = [
   '#FF4DA6',
 ] as const
 
+const howToSteps = {
+  tr: [
+    {
+      title: '1. ODAYA KATIL',
+      text: 'Takma adını seç, top rengine karar ver ve oyuna başla.',
+    },
+    {
+      title: '2. TAKIMINI KUR',
+      text: 'Arkadaşlarınla aynı odaya girip hızlıca eşleş.',
+    },
+    {
+      title: '3. MAÇA ÇIK',
+      text: 'Pozisyon al, paslaş ve rakip kaleye hücum et.',
+    },
+    {
+      title: '4. GOL AT',
+      text: 'Doğru anda şut çek, skorunu yükselt.',
+    },
+    {
+      title: '5. SAVUN',
+      text: 'Topu kap, geri kazan ve tempoyu bozma.',
+    },
+    {
+      title: '6. KAZAN',
+      text: 'Maç sonunda en yüksek skoru alan takım zaferi alır.',
+    },
+  ],
+  en: [
+    {
+      title: '1. JOIN A ROOM',
+      text: 'Pick a nickname, choose your ball color, and jump in.',
+    },
+    {
+      title: '2. BUILD YOUR TEAM',
+      text: 'Invite friends into the same room and match up fast.',
+    },
+    {
+      title: '3. HIT THE PITCH',
+      text: 'Take your position, pass the ball, and attack the goal.',
+    },
+    {
+      title: '4. SCORE GOALS',
+      text: 'Shoot at the right moment and climb the scoreboard.',
+    },
+    {
+      title: '5. DEFEND HARD',
+      text: 'Win the ball back and keep the tempo alive.',
+    },
+    {
+      title: '6. WIN THE MATCH',
+      text: 'The team with the highest score takes the win.',
+    },
+  ],
+  de: [
+    {
+      title: '1. RAUM BETRETEN',
+      text: 'Wähle Spitznamen und Ballfarbe und starte das Spiel.',
+    },
+    {
+      title: '2. TEAM BILDEN',
+      text: 'Lade Freunde in denselben Raum ein und findet schnell zusammen.',
+    },
+    {
+      title: '3. AUF DEN PLATZ',
+      text: 'Nimm deine Position ein, passe und greife das Tor an.',
+    },
+    {
+      title: '4. TORE SCHIESSEN',
+      text: 'Schieße im richtigen Moment und steigere den Punktestand.',
+    },
+    {
+      title: '5. VERTEIDIGEN',
+      text: 'Erobere den Ball zurück und halte das Tempo hoch.',
+    },
+    {
+      title: '6. GEWINNEN',
+      text: 'Das Team mit dem höchsten Score gewinnt das Spiel.',
+    },
+  ],
+} as const
+
 const copy = {
   tr: {
     anonymous: 'ANONİM',
@@ -34,6 +115,9 @@ const copy = {
     password: 'Şifre',
     loginStart: 'GİRİŞ YAP VE BAŞLA',
     pickBall: 'Top rengi seç',
+    howToPlay: 'NASIL OYNANIR',
+    prev: 'Önceki',
+    next: 'Sonraki',
   },
   en: {
     anonymous: 'ANONYMOUS',
@@ -45,6 +129,9 @@ const copy = {
     password: 'Password',
     loginStart: 'SIGN IN AND START',
     pickBall: 'Pick a ball color',
+    howToPlay: 'HOW TO PLAY',
+    prev: 'Previous',
+    next: 'Next',
   },
   de: {
     anonymous: 'ANONYM',
@@ -56,6 +143,9 @@ const copy = {
     password: 'Passwort',
     loginStart: 'ANMELDEN UND STARTEN',
     pickBall: 'Ballfarbe wählen',
+    howToPlay: 'SO SPIELT MAN',
+    prev: 'Zurück',
+    next: 'Weiter',
   },
 } as const
 
@@ -122,6 +212,21 @@ function ChangeIcon() {
   )
 }
 
+function ChevronIcon({ dir }: { dir: 'left' | 'right' }) {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path
+        d={dir === 'left' ? 'M14.5 6 8.5 12l6 6' : 'M9.5 6 15.5 12l-6 6'}
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2.4"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  )
+}
+
 function randomNickname(lang: Lang) {
   const n = Math.floor(1000 + Math.random() * 9000)
   if (lang === 'tr') return `Futbolcu${n}`
@@ -136,13 +241,20 @@ function App() {
   const [nickname, setNickname] = useState(() => randomNickname('tr'))
   const [ballColor, setBallColor] = useState<string>(ballColors[1])
   const [pickerOpen, setPickerOpen] = useState(false)
+  const [step, setStep] = useState(0)
   const menuRef = useRef<HTMLDivElement>(null)
   const pickerRef = useRef<HTMLDivElement>(null)
   const t = copy[lang]
+  const steps = howToSteps[lang]
   const current = languages.find((item) => item.code === lang) ?? languages[0]
+  const activeStep = steps[step]
 
   useEffect(() => {
     document.documentElement.lang = lang
+  }, [lang])
+
+  useEffect(() => {
+    setStep(0)
   }, [lang])
 
   useEffect(() => {
@@ -171,127 +283,180 @@ function App() {
 
   return (
     <div className="glass-window">
-      <img className="brand-mark" src={logoAndTitle} alt="socceristan" />
-
-      <div className="lang-menu" ref={menuRef}>
-        <button
-          type="button"
-          className="lang-button"
-          aria-haspopup="listbox"
-          aria-expanded={open}
-          onClick={() => setOpen((value) => !value)}
-        >
-          <GlobeIcon />
-          <span>{current.label}</span>
-        </button>
-
-        {open && (
-          <ul className="lang-dropdown" role="listbox" aria-label="Language">
-            {languages.map((item) => (
-              <li key={item.code}>
-                <button
-                  type="button"
-                  role="option"
-                  aria-selected={item.code === lang}
-                  className={item.code === lang ? 'active' : undefined}
-                  onClick={() => {
-                    setLang(item.code)
-                    setNickname(randomNickname(item.code))
-                    setOpen(false)
-                  }}
-                >
-                  {item.label}
-                </button>
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
-
-      <section className="entry-panel" aria-label="Entry">
-        <div className="entry-tabs" role="tablist">
+      <header className="window-top">
+        <div className="lang-menu" ref={menuRef}>
           <button
             type="button"
-            role="tab"
-            aria-selected={mode === 'anonymous'}
-            className={mode === 'anonymous' ? 'active' : undefined}
-            onClick={() => setMode('anonymous')}
+            className="lang-button"
+            aria-haspopup="listbox"
+            aria-expanded={open}
+            onClick={() => setOpen((value) => !value)}
           >
-            {t.anonymous}
+            <GlobeIcon />
+            <span>{current.label}</span>
           </button>
-          <button
-            type="button"
-            role="tab"
-            aria-selected={mode === 'authenticated'}
-            className={mode === 'authenticated' ? 'active' : undefined}
-            onClick={() => setMode('authenticated')}
-          >
-            {t.authenticated}
-          </button>
-        </div>
 
-        <div className="entry-body">
-          {mode === 'anonymous' ? (
-            <div className="entry-anonymous">
-              <div className="avatar-wrap" ref={pickerRef}>
-                <div className="avatar">
-                  <SoccerBall color={ballColor} title={t.pickBall} />
-                </div>
-                <button
-                  type="button"
-                  className="avatar-shuffle"
-                  aria-label={t.pickBall}
-                  aria-expanded={pickerOpen}
-                  onClick={() => setPickerOpen((value) => !value)}
-                >
-                  <ChangeIcon />
-                </button>
-
-                {pickerOpen && (
-                  <div className="ball-picker" role="listbox" aria-label={t.pickBall}>
-                    {ballColors.map((color) => (
-                      <button
-                        key={color}
-                        type="button"
-                        role="option"
-                        aria-selected={color === ballColor}
-                        className={color === ballColor ? 'active' : undefined}
-                        onClick={() => {
-                          setBallColor(color)
-                          setPickerOpen(false)
-                        }}
-                      >
-                        <SoccerBall color={color} />
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              <div className="entry-fields">
-                <p>{t.choose}</p>
-                <input
-                  type="text"
-                  value={nickname}
-                  onChange={(event) => setNickname(event.target.value)}
-                  aria-label={t.nickname}
-                  maxLength={20}
-                />
-              </div>
-            </div>
-          ) : (
-            <div className="entry-auth">
-              <input type="email" placeholder={t.email} aria-label={t.email} />
-              <input type="password" placeholder={t.password} aria-label={t.password} />
-            </div>
+          {open && (
+            <ul className="lang-dropdown" role="listbox" aria-label="Language">
+              {languages.map((item) => (
+                <li key={item.code}>
+                  <button
+                    type="button"
+                    role="option"
+                    aria-selected={item.code === lang}
+                    className={item.code === lang ? 'active' : undefined}
+                    onClick={() => {
+                      setLang(item.code)
+                      setNickname(randomNickname(item.code))
+                      setOpen(false)
+                    }}
+                  >
+                    {item.label}
+                  </button>
+                </li>
+              ))}
+            </ul>
           )}
-
-          <button type="button" className="start-button">
-            <PlayIcon />
-            <span>{mode === 'anonymous' ? t.start : t.loginStart}</span>
-          </button>
         </div>
-      </section>
+
+        <img className="brand-mark" src={logoAndTitle} alt="socceristan" />
+        <div className="top-spacer" aria-hidden="true" />
+      </header>
+
+      <div className="window-body">
+        <section className="entry-panel" aria-label="Entry">
+          <div className="entry-tabs" role="tablist">
+            <button
+              type="button"
+              role="tab"
+              aria-selected={mode === 'anonymous'}
+              className={mode === 'anonymous' ? 'active' : undefined}
+              onClick={() => setMode('anonymous')}
+            >
+              {t.anonymous}
+            </button>
+            <button
+              type="button"
+              role="tab"
+              aria-selected={mode === 'authenticated'}
+              className={mode === 'authenticated' ? 'active' : undefined}
+              onClick={() => setMode('authenticated')}
+            >
+              {t.authenticated}
+            </button>
+          </div>
+
+          <div className="entry-body">
+            {mode === 'anonymous' ? (
+              <div className="entry-anonymous">
+                <div className="avatar-wrap" ref={pickerRef}>
+                  <div className="avatar">
+                    <SoccerBall color={ballColor} title={t.pickBall} />
+                  </div>
+                  <button
+                    type="button"
+                    className="avatar-shuffle"
+                    aria-label={t.pickBall}
+                    aria-expanded={pickerOpen}
+                    onClick={() => setPickerOpen((value) => !value)}
+                  >
+                    <ChangeIcon />
+                  </button>
+
+                  {pickerOpen && (
+                    <div className="ball-picker" role="listbox" aria-label={t.pickBall}>
+                      {ballColors.map((color) => (
+                        <button
+                          key={color}
+                          type="button"
+                          role="option"
+                          aria-selected={color === ballColor}
+                          className={color === ballColor ? 'active' : undefined}
+                          onClick={() => {
+                            setBallColor(color)
+                            setPickerOpen(false)
+                          }}
+                        >
+                          <SoccerBall color={color} />
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                <div className="entry-fields">
+                  <p>{t.choose}</p>
+                  <input
+                    type="text"
+                    value={nickname}
+                    onChange={(event) => setNickname(event.target.value)}
+                    aria-label={t.nickname}
+                    maxLength={20}
+                  />
+                </div>
+              </div>
+            ) : (
+              <div className="entry-auth">
+                <input type="email" placeholder={t.email} aria-label={t.email} />
+                <input type="password" placeholder={t.password} aria-label={t.password} />
+              </div>
+            )}
+
+            <button type="button" className="start-button">
+              <PlayIcon />
+              <span>{mode === 'anonymous' ? t.start : t.loginStart}</span>
+            </button>
+          </div>
+        </section>
+
+        <section className="howto-panel" aria-label={t.howToPlay}>
+          <h2 className="howto-title">{t.howToPlay}</h2>
+
+          <div className="howto-art" aria-hidden="true">
+            <SoccerBall color={ballColors[step % ballColors.length]} className="howto-ball" />
+            <SoccerBall color={ballColors[(step + 3) % ballColors.length]} className="howto-ball small" />
+          </div>
+
+          <div className="howto-copy">
+            <h3>{activeStep.title}</h3>
+            <p>{activeStep.text}</p>
+          </div>
+
+          <div className="howto-nav">
+            <button
+              type="button"
+              className="howto-arrow"
+              aria-label={t.prev}
+              onClick={() => setStep((value) => (value - 1 + steps.length) % steps.length)}
+            >
+              <ChevronIcon dir="left" />
+            </button>
+
+            <div className="howto-dots" role="tablist" aria-label={t.howToPlay}>
+              {steps.map((item, index) => (
+                <button
+                  key={item.title}
+                  type="button"
+                  role="tab"
+                  aria-selected={index === step}
+                  aria-label={`${index + 1}`}
+                  className={index === step ? 'active' : undefined}
+                  onClick={() => setStep(index)}
+                />
+              ))}
+            </div>
+
+            <button
+              type="button"
+              className="howto-arrow"
+              aria-label={t.next}
+              onClick={() => setStep((value) => (value + 1) % steps.length)}
+            >
+              <ChevronIcon dir="right" />
+            </button>
+          </div>
+        </section>
+      </div>
     </div>
   )
 }
