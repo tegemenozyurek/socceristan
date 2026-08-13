@@ -20,41 +20,41 @@ const ballColors = [
   '#F1C40F',
   '#E67E22',
   '#9B59B6',
-  '#1ABC9C',
+  '#FF4DA6',
 ] as const
 
 const copy = {
   tr: {
-    anonymous: 'Anonim',
-    authenticated: 'Hesaplı',
-    choose: 'Top rengi ve takma ad seç',
+    anonymous: 'ANONİM',
+    authenticated: 'HESAPLI',
+    choose: 'TOP RENGİ VE TAKMA AD SEÇ',
     nickname: 'TakmaAd',
-    start: 'Başla',
+    start: 'BAŞLA',
     email: 'E-posta',
     password: 'Şifre',
-    loginStart: 'Giriş yap ve başla',
+    loginStart: 'GİRİŞ YAP VE BAŞLA',
     pickBall: 'Top rengi seç',
   },
   en: {
-    anonymous: 'Anonymous',
-    authenticated: 'Authenticated',
-    choose: 'Choose a ball color and a nickname',
+    anonymous: 'ANONYMOUS',
+    authenticated: 'AUTHENTICATED',
+    choose: 'CHOOSE A BALL COLOR AND A NICKNAME',
     nickname: 'Nickname',
-    start: 'Start',
+    start: 'START',
     email: 'Email',
     password: 'Password',
-    loginStart: 'Sign in and start',
+    loginStart: 'SIGN IN AND START',
     pickBall: 'Pick a ball color',
   },
   de: {
-    anonymous: 'Anonym',
-    authenticated: 'Angemeldet',
-    choose: 'Wähle eine Ballfarbe und einen Spitznamen',
+    anonymous: 'ANONYM',
+    authenticated: 'ANGEMELDET',
+    choose: 'WÄHLE EINE BALLFARBE UND EINEN SPITZNAMEN',
     nickname: 'Spitzname',
-    start: 'Start',
+    start: 'START',
     email: 'E-Mail',
     password: 'Passwort',
-    loginStart: 'Anmelden und starten',
+    loginStart: 'ANMELDEN UND STARTEN',
     pickBall: 'Ballfarbe wählen',
   },
 } as const
@@ -140,6 +140,10 @@ function App() {
   const pickerRef = useRef<HTMLDivElement>(null)
   const t = copy[lang]
   const current = languages.find((item) => item.code === lang) ?? languages[0]
+
+  useEffect(() => {
+    document.documentElement.lang = lang
+  }, [lang])
 
   useEffect(() => {
     if (!open && !pickerOpen) return
