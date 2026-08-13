@@ -25,16 +25,15 @@ body {
   background-image:
     repeating-conic-gradient(
       from 0deg at 50% 50%,
-      rgba(255, 255, 255, 0.05) 0deg 9deg,
-      rgba(0, 0, 0, 0.03) 9deg 18deg
+      rgba(255, 255, 255, 0.022) 0deg 9deg,
+      rgba(0, 0, 0, 0.012) 9deg 18deg
     ),
     linear-gradient(
       148deg,
       #052816 0%,
-      #0b4a2a 28%,
-      #157a42 58%,
-      #27c46a 82%,
-      #6ef0a0 100%
+      #0b4a2a 40%,
+      #126b38 72%,
+      #157a42 100%
     );
   background-attachment: fixed;
 }
