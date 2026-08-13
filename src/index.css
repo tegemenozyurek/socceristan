@@ -1,6 +1,6 @@
 :root {
   --bg: #0a2e1a;
-  --bg-deep: #06351f;
+  --bg-deep: #126b38;
   --bg-mid: #148046;
   --bg-bright: #2ecc71;
   --fg: #f4f7f5;
@@ -25,14 +25,13 @@ body {
   background-image:
     repeating-conic-gradient(
       from 0deg at 50% 50%,
-      rgba(255, 255, 255, 0.022) 0deg 9deg,
-      rgba(0, 0, 0, 0.012) 9deg 18deg
+      rgba(255, 255, 255, 0.03) 0deg 9deg,
+      rgba(255, 255, 255, 0.01) 9deg 18deg
     ),
     linear-gradient(
       148deg,
-      #052816 0%,
-      #0b4a2a 40%,
-      #126b38 72%,
+      #126b38 0%,
+      #148046 45%,
       #157a42 100%
     );
   background-attachment: fixed;
