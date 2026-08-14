@@ -4,7 +4,6 @@ import { SoccerBall } from './components/SoccerBall'
 import './App.css'
 
 type Lang = 'tr' | 'en' | 'de'
-type AuthMode = 'anonymous' | 'authenticated'
 
 const languages: { code: Lang; label: string }[] = [
   { code: 'tr', label: 'TR' },
@@ -25,38 +24,26 @@ const ballColors = [
 
 const copy = {
   tr: {
-    anonymous: 'ANONİM',
-    authenticated: 'HESAPLI',
+    signIn: 'GİRİŞ YAP',
     choose: 'TOP RENGİ VE TAKMA AD SEÇ',
     nickname: 'TakmaAd',
     start: 'BAŞLA',
-    email: 'E-posta',
-    password: 'Şifre',
-    loginStart: 'GİRİŞ YAP VE BAŞLA',
     pickBall: 'Top rengi seç',
     howToPlay: 'NASIL OYNANIR',
   },
   en: {
-    anonymous: 'ANONYMOUS',
-    authenticated: 'AUTHENTICATED',
+    signIn: 'SIGN IN',
     choose: 'CHOOSE A BALL COLOR AND A NICKNAME',
     nickname: 'Nickname',
     start: 'START',
-    email: 'Email',
-    password: 'Password',
-    loginStart: 'SIGN IN AND START',
     pickBall: 'Pick a ball color',
     howToPlay: 'HOW TO PLAY',
   },
   de: {
-    anonymous: 'ANONYM',
-    authenticated: 'ANGEMELDET',
+    signIn: 'ANMELDEN',
     choose: 'WÄHLE EINE BALLFARBE UND EINEN SPITZNAMEN',
     nickname: 'Spitzname',
     start: 'START',
-    email: 'E-Mail',
-    password: 'Passwort',
-    loginStart: 'ANMELDEN UND STARTEN',
     pickBall: 'Ballfarbe wählen',
     howToPlay: 'SO SPIELT MAN',
   },
@@ -135,7 +122,6 @@ function randomNickname(lang: Lang) {
 function App() {
   const [lang, setLang] = useState<Lang>('tr')
   const [open, setOpen] = useState(false)
-  const [mode, setMode] = useState<AuthMode>('anonymous')
   const [nickname, setNickname] = useState(() => randomNickname('tr'))
   const [ballColor, setBallColor] = useState<string>(ballColors[1])
   const [pickerOpen, setPickerOpen] = useState(false)
@@ -215,87 +201,63 @@ function App() {
       </header>
 
       <div className="window-body">
-        <section className="entry-panel" aria-label="Entry">
-          <div className="entry-tabs" role="tablist">
-            <button
-              type="button"
-              role="tab"
-              aria-selected={mode === 'anonymous'}
-              className={mode === 'anonymous' ? 'active' : undefined}
-              onClick={() => setMode('anonymous')}
-            >
-              {t.anonymous}
-            </button>
-            <button
-              type="button"
-              role="tab"
-              aria-selected={mode === 'authenticated'}
-              className={mode === 'authenticated' ? 'active' : undefined}
-              onClick={() => setMode('authenticated')}
-            >
-              {t.authenticated}
-            </button>
+        <section className="entry-panel" aria-label={t.signIn}>
+          <div className="entry-tabs">
+            <h2 className="entry-heading">{t.signIn}</h2>
           </div>
 
           <div className="entry-body">
-            {mode === 'anonymous' ? (
-              <div className="entry-anonymous">
-                <div className="avatar-wrap" ref={pickerRef}>
-                  <div className="avatar">
-                    <SoccerBall color={ballColor} title={t.pickBall} />
+            <div className="entry-anonymous">
+              <div className="avatar-wrap" ref={pickerRef}>
+                <div className="avatar">
+                  <SoccerBall color={ballColor} title={t.pickBall} />
+                </div>
+                <button
+                  type="button"
+                  className="avatar-shuffle"
+                  aria-label={t.pickBall}
+                  aria-expanded={pickerOpen}
+                  onClick={() => setPickerOpen((value) => !value)}
+                >
+                  <ChangeIcon />
+                </button>
+
+                {pickerOpen && (
+                  <div className="ball-picker" role="listbox" aria-label={t.pickBall}>
+                    {ballColors.map((color) => (
+                      <button
+                        key={color}
+                        type="button"
+                        role="option"
+                        aria-selected={color === ballColor}
+                        className={color === ballColor ? 'active' : undefined}
+                        onClick={() => {
+                          setBallColor(color)
+                          setPickerOpen(false)
+                        }}
+                      >
+                        <SoccerBall color={color} />
+                      </button>
+                    ))}
                   </div>
-                  <button
-                    type="button"
-                    className="avatar-shuffle"
-                    aria-label={t.pickBall}
-                    aria-expanded={pickerOpen}
-                    onClick={() => setPickerOpen((value) => !value)}
-                  >
-                    <ChangeIcon />
-                  </button>
-
-                  {pickerOpen && (
-                    <div className="ball-picker" role="listbox" aria-label={t.pickBall}>
-                      {ballColors.map((color) => (
-                        <button
-                          key={color}
-                          type="button"
-                          role="option"
-                          aria-selected={color === ballColor}
-                          className={color === ballColor ? 'active' : undefined}
-                          onClick={() => {
-                            setBallColor(color)
-                            setPickerOpen(false)
-                          }}
-                        >
-                          <SoccerBall color={color} />
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
-
-                <div className="entry-fields">
-                  <p>{t.choose}</p>
-                  <input
-                    type="text"
-                    value={nickname}
-                    onChange={(event) => setNickname(event.target.value)}
-                    aria-label={t.nickname}
-                    maxLength={20}
-                  />
-                </div>
+                )}
               </div>
-            ) : (
-              <div className="entry-auth">
-                <input type="email" placeholder={t.email} aria-label={t.email} />
-                <input type="password" placeholder={t.password} aria-label={t.password} />
+
+              <div className="entry-fields">
+                <p>{t.choose}</p>
+                <input
+                  type="text"
+                  value={nickname}
+                  onChange={(event) => setNickname(event.target.value)}
+                  aria-label={t.nickname}
+                  maxLength={20}
+                />
               </div>
-            )}
+            </div>
 
             <button type="button" className="start-button">
               <PlayIcon />
-              <span>{mode === 'anonymous' ? t.start : t.loginStart}</span>
+              <span>{t.start}</span>
             </button>
           </div>
         </section>
