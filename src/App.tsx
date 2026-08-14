@@ -84,6 +84,17 @@ const copy = {
       training: 'ANTRENMAN',
       custom: 'ÖZEL',
     },
+    modeDesc: {
+      classic: 'Standart maç. Zamanlı oynayın veya ilk golü atan kazansın.',
+      quick: 'Kısa turlar, hızlı skor. Atlayın ve hemen oynayın.',
+      penalty: 'Sadece penaltı. Noktadan sırayla şut atın.',
+      tournament: 'Birden fazla maçlık bracket turnuvası.',
+      friends: 'Arkadaşlarla özel lobi, rahat kurallar.',
+      ranked: 'Rekabetçi puanlarla sıralamada yüksel.',
+      arcade: 'Çılgın kurallar ve güçlendirmelerle kaos.',
+      training: 'Yalnız veya yapay zekaya karşı antrenman.',
+      custom: 'Kendi kurallarını ve maç süreni belirle.',
+    },
   },
   en: {
     signIn: 'SIGN IN',
@@ -117,6 +128,17 @@ const copy = {
       training: 'TRAINING',
       custom: 'CUSTOM',
     },
+    modeDesc: {
+      classic: 'Standard match. Play timed or first goal wins.',
+      quick: 'Short rounds, fast scoring. Jump in and play.',
+      penalty: 'Penalties only. Take turns from the spot.',
+      tournament: 'Bracket competition across multiple matches.',
+      friends: 'Private lobby with friends and casual rules.',
+      ranked: 'Climb the ladder with competitive scoring.',
+      arcade: 'Wild rules and power-ups for chaotic fun.',
+      training: 'Practice alone or vs AI — no pressure.',
+      custom: 'Build your own rules and match length.',
+    },
   },
   de: {
     signIn: 'ANMELDEN',
@@ -149,6 +171,17 @@ const copy = {
       arcade: 'ARCADE',
       training: 'TRAINING',
       custom: 'CUSTOM',
+    },
+    modeDesc: {
+      classic: 'Standardspiel. Zeitlich oder erstes Tor gewinnt.',
+      quick: 'Kurze Runden, schnelle Tore. Rein und spielen.',
+      penalty: 'Nur Elfmeter. Abwechselnd vom Punkt schießen.',
+      tournament: 'Bracket-Turnier über mehrere Spiele.',
+      friends: 'Private Lobby mit Freunden und lockeren Regeln.',
+      ranked: 'Steige mit Wettbewerbs-Punkten in der Rangliste.',
+      arcade: 'Wilde Regeln und Power-ups für Chaos-Spaß.',
+      training: 'Allein oder gegen KI trainieren — ohne Druck.',
+      custom: 'Eigene Regeln und Spieldauer festlegen.',
     },
   },
 } as const
@@ -530,10 +563,16 @@ function App() {
                   className={mode === item.id ? 'mode-card active' : 'mode-card'}
                   onClick={() => setMode(item.id)}
                 >
-                  <span className="mode-icon" aria-hidden="true">
-                    {item.icon}
+                  <span className="mode-face mode-face-default">
+                    <span className="mode-icon" aria-hidden="true">
+                      {item.icon}
+                    </span>
+                    <span className="mode-title">{t.modes[item.id]}</span>
                   </span>
-                  <span>{t.modes[item.id]}</span>
+                  <span className="mode-face mode-face-detail" aria-hidden="true">
+                    <span className="mode-title">{t.modes[item.id]}</span>
+                    <span className="mode-desc">{t.modeDesc[item.id]}</span>
+                  </span>
                 </button>
               ))}
             </div>
