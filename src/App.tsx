@@ -1,9 +1,27 @@
 import { useEffect, useRef, useState } from 'react'
 import logoAndTitle from './assets/logoAndTitle.svg'
-import { SoccerBall } from './components/SoccerBall'
+import bull from './assets/characters/bull.png'
+import cat from './assets/characters/cat.png'
+import chicken from './assets/characters/chicken.png'
+import crocs from './assets/characters/crocs.png'
+import dog from './assets/characters/dog.png'
+import flamingo from './assets/characters/flamingo.png'
+import racoon from './assets/characters/racoon.png'
+import snake from './assets/characters/snake.png'
 import './App.css'
 
 type Lang = 'tr' | 'en' | 'de'
+type Screen = 'home' | 'lobby'
+type ModeId =
+  | 'classic'
+  | 'quick'
+  | 'penalty'
+  | 'tournament'
+  | 'friends'
+  | 'ranked'
+  | 'arcade'
+  | 'training'
+  | 'custom'
 
 const languages: { code: Lang; label: string }[] = [
   { code: 'tr', label: 'TR' },
@@ -11,56 +29,127 @@ const languages: { code: Lang; label: string }[] = [
   { code: 'de', label: 'DE' },
 ]
 
-const ballColors = [
-  '#F4F7F5',
-  '#2ECC71',
-  '#3498DB',
-  '#E74C3C',
-  '#F1C40F',
-  '#E67E22',
-  '#9B59B6',
-  '#FF4DA6',
-] as const
+const characters = [bull, cat, chicken, crocs, dog, flamingo, racoon, snake] as const
+const playerCapacityOptions = [2, 4, 6, 8] as const
+
+function randomCharacter(exclude?: string) {
+  const options = exclude
+    ? characters.filter((item) => item !== exclude)
+    : [...characters]
+  return options[Math.floor(Math.random() * options.length)] ?? characters[0]
+}
+
+const modes: { id: ModeId; icon: string }[] = [
+  { id: 'classic', icon: '⚽' },
+  { id: 'quick', icon: '⚡' },
+  { id: 'penalty', icon: '🥅' },
+  { id: 'tournament', icon: '🏆' },
+  { id: 'friends', icon: '🤝' },
+  { id: 'ranked', icon: '📈' },
+  { id: 'arcade', icon: '🎮' },
+  { id: 'training', icon: '🎯' },
+  { id: 'custom', icon: '⚙️' },
+]
 
 const copy = {
   tr: {
     signIn: 'GİRİŞ YAP',
     choose: 'KARAKTER VE TAKMA AD SEÇ',
     nickname: 'TakmaAd',
-    start: 'BAŞLA',
-    pickBall: 'Top rengi seç',
+    start: 'HIZLI BAŞLA',
+    pickCharacter: 'Karakter değiştir',
     howToPlay: 'NASIL OYNANIR',
     or: 'veya',
     google: 'Google ile devam et',
     terms: 'KULLANIM ŞARTLARI',
     privacy: 'GİZLİLİK',
     contact: 'İLETİŞİM',
+    back: 'GERİ',
+    players: 'OYUNCULAR',
+    empty: 'BOŞ',
+    presets: 'MODLAR',
+    invite: 'DAVET ET',
+    startMatch: 'BAŞLAT',
+    playersCount: (n: number) => `${n} OYUNCU`,
+    soundOn: 'Sesi aç',
+    soundOff: 'Sesi kapat',
+    modes: {
+      classic: 'KLASİK',
+      quick: 'HIZLI',
+      penalty: 'PENALTI',
+      tournament: 'TURNUVA',
+      friends: 'ARKADAŞ',
+      ranked: 'SIRALI',
+      arcade: 'ARCADE',
+      training: 'ANTRENMAN',
+      custom: 'ÖZEL',
+    },
   },
   en: {
     signIn: 'SIGN IN',
     choose: 'CHOOSE A CHARACTER AND A NICKNAME',
     nickname: 'Nickname',
-    start: 'START',
-    pickBall: 'Pick a ball color',
+    start: 'QUICK START',
+    pickCharacter: 'Change character',
     howToPlay: 'HOW TO PLAY',
     or: 'or',
     google: 'Continue with Google',
     terms: 'TERMS OF SERVICE',
     privacy: 'PRIVACY',
     contact: 'CONTACT',
+    back: 'BACK',
+    players: 'PLAYERS',
+    empty: 'EMPTY',
+    presets: 'MODES',
+    invite: 'INVITE',
+    startMatch: 'START',
+    playersCount: (n: number) => `${n} PLAYERS`,
+    soundOn: 'Unmute sound',
+    soundOff: 'Mute sound',
+    modes: {
+      classic: 'CLASSIC',
+      quick: 'QUICK',
+      penalty: 'PENALTY',
+      tournament: 'TOURNAMENT',
+      friends: 'FRIENDS',
+      ranked: 'RANKED',
+      arcade: 'ARCADE',
+      training: 'TRAINING',
+      custom: 'CUSTOM',
+    },
   },
   de: {
     signIn: 'ANMELDEN',
     choose: 'WÄHLE EINEN CHARAKTER UND SPITZNAMEN',
     nickname: 'Spitzname',
-    start: 'START',
-    pickBall: 'Ballfarbe wählen',
+    start: 'SCHNELLSTART',
+    pickCharacter: 'Charakter wechseln',
     howToPlay: 'SO SPIELT MAN',
     or: 'oder',
     google: 'Mit Google fortfahren',
     terms: 'NUTZUNGSBEDINGUNGEN',
     privacy: 'DATENSCHUTZ',
     contact: 'KONTAKT',
+    back: 'ZURÜCK',
+    players: 'SPIELER',
+    empty: 'LEER',
+    presets: 'MODI',
+    invite: 'EINLADEN',
+    startMatch: 'START',
+    playersCount: (n: number) => `${n} SPIELER`,
+    soundOn: 'Ton einschalten',
+    soundOff: 'Ton ausschalten',
+    modes: {
+      classic: 'KLASSISCH',
+      quick: 'SCHNELL',
+      penalty: 'ELFMETER',
+      tournament: 'TURNIER',
+      friends: 'FREUNDE',
+      ranked: 'RANGLISTE',
+      arcade: 'ARCADE',
+      training: 'TRAINING',
+      custom: 'CUSTOM',
+    },
   },
 } as const
 
@@ -75,15 +164,6 @@ function GlobeIcon() {
         stroke="currentColor"
         strokeWidth="1.6"
       />
-    </svg>
-  )
-}
-
-function PlayIcon() {
-  return (
-    <svg viewBox="0 0 24 24" aria-hidden="true">
-      <circle cx="12" cy="12" r="10" fill="currentColor" opacity="0.2" />
-      <path d="M10 8.5v7l6-3.5-6-3.5z" fill="currentColor" />
     </svg>
   )
 }
@@ -150,6 +230,85 @@ function ChangeIcon() {
   )
 }
 
+function BackIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path
+        d="M14.5 6 8.5 12l6 6"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2.2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  )
+}
+
+function CrownIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path
+        d="M4 16 6.5 9l3.5 3.5L12 7l2 5.5L17.5 9 20 16H4z"
+        fill="currentColor"
+      />
+    </svg>
+  )
+}
+
+function EmptyAvatarIcon() {
+  return (
+    <svg className="empty-avatar" viewBox="0 0 40 40" aria-hidden="true">
+      <circle cx="20" cy="20" r="18" fill="rgba(255,255,255,0.12)" />
+      <circle cx="14" cy="17" r="2.1" fill="rgba(255,255,255,0.55)" />
+      <circle cx="26" cy="17" r="2.1" fill="rgba(255,255,255,0.55)" />
+      <path
+        d="M13 28c2.2-2.4 5-3.6 7-3.6s4.8 1.2 7 3.6"
+        fill="none"
+        stroke="rgba(255,255,255,0.55)"
+        strokeWidth="2.2"
+        strokeLinecap="round"
+      />
+    </svg>
+  )
+}
+
+function SoundOnIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path
+        d="M4 9.5v5h3.2L12 18.5v-13L7.2 9.5H4z"
+        fill="currentColor"
+      />
+      <path
+        d="M15.2 9.2a3.4 3.4 0 0 1 0 5.6M17.6 7a6 6 0 0 1 0 10"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+      />
+    </svg>
+  )
+}
+
+function SoundOffIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path
+        d="M4 9.5v5h3.2L12 18.5v-13L7.2 9.5H4z"
+        fill="currentColor"
+      />
+      <path
+        d="M16 9.5 20.5 14M20.5 9.5 16 14"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+      />
+    </svg>
+  )
+}
+
 function randomNickname(lang: Lang) {
   const n = Math.floor(1000 + Math.random() * 9000)
   if (lang === 'tr') return `Futbolcu${n}`
@@ -158,34 +317,32 @@ function randomNickname(lang: Lang) {
 }
 
 function App() {
+  const [screen, setScreen] = useState<Screen>('home')
   const [lang, setLang] = useState<Lang>('tr')
   const [open, setOpen] = useState(false)
   const [nickname, setNickname] = useState(() => randomNickname('tr'))
-  const [ballColor, setBallColor] = useState<string>(ballColors[1])
-  const [pickerOpen, setPickerOpen] = useState(false)
+  const [character, setCharacter] = useState(() => randomCharacter())
+  const [capacity, setCapacity] = useState<(typeof playerCapacityOptions)[number]>(8)
+  const [mode, setMode] = useState<ModeId>('classic')
+  const [soundOn, setSoundOn] = useState(true)
   const menuRef = useRef<HTMLDivElement>(null)
-  const pickerRef = useRef<HTMLDivElement>(null)
   const t = copy[lang]
   const current = languages.find((item) => item.code === lang) ?? languages[0]
+  const filledSlots = 1
 
   useEffect(() => {
     document.documentElement.lang = lang
   }, [lang])
 
   useEffect(() => {
-    if (!open && !pickerOpen) return
+    if (!open) return
 
     const onPointerDown = (event: PointerEvent) => {
-      const target = event.target as Node
-      if (open && !menuRef.current?.contains(target)) setOpen(false)
-      if (pickerOpen && !pickerRef.current?.contains(target)) setPickerOpen(false)
+      if (!menuRef.current?.contains(event.target as Node)) setOpen(false)
     }
 
     const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        setOpen(false)
-        setPickerOpen(false)
-      }
+      if (event.key === 'Escape') setOpen(false)
     }
 
     document.addEventListener('pointerdown', onPointerDown)
@@ -194,137 +351,216 @@ function App() {
       document.removeEventListener('pointerdown', onPointerDown)
       document.removeEventListener('keydown', onKeyDown)
     }
-  }, [open, pickerOpen])
+  }, [open])
 
   return (
     <div className="glass-window">
       <header className="window-top">
-        <div className="lang-menu" ref={menuRef}>
+        {screen === 'lobby' ? (
           <button
             type="button"
-            className="lang-button"
-            aria-haspopup="listbox"
-            aria-expanded={open}
-            onClick={() => setOpen((value) => !value)}
+            className="back-button"
+            onClick={() => setScreen('home')}
           >
-            <GlobeIcon />
-            <span>{current.label}</span>
+            <BackIcon />
+            <span>{t.back}</span>
           </button>
+        ) : (
+          <div className="lang-menu" ref={menuRef}>
+            <button
+              type="button"
+              className="lang-button"
+              aria-haspopup="listbox"
+              aria-expanded={open}
+              onClick={() => setOpen((value) => !value)}
+            >
+              <GlobeIcon />
+              <span>{current.label}</span>
+            </button>
 
-          {open && (
-            <ul className="lang-dropdown" role="listbox" aria-label="Language">
-              {languages.map((item) => (
-                <li key={item.code}>
-                  <button
-                    type="button"
-                    role="option"
-                    aria-selected={item.code === lang}
-                    className={item.code === lang ? 'active' : undefined}
-                    onClick={() => {
-                      setLang(item.code)
-                      setNickname(randomNickname(item.code))
-                      setOpen(false)
-                    }}
-                  >
-                    {item.label}
-                  </button>
+            {open && (
+              <ul className="lang-dropdown" role="listbox" aria-label="Language">
+                {languages.map((item) => (
+                  <li key={item.code}>
+                    <button
+                      type="button"
+                      role="option"
+                      aria-selected={item.code === lang}
+                      className={item.code === lang ? 'active' : undefined}
+                      onClick={() => {
+                        setLang(item.code)
+                        setNickname(randomNickname(item.code))
+                        setOpen(false)
+                      }}
+                    >
+                      {item.label}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        )}
+
+        <img className="brand-mark" src={logoAndTitle} alt="socceristan" />
+
+        <button
+          type="button"
+          className={soundOn ? 'sound-button' : 'sound-button muted'}
+          aria-pressed={!soundOn}
+          aria-label={soundOn ? t.soundOff : t.soundOn}
+          onClick={() => setSoundOn((value) => !value)}
+        >
+          {soundOn ? <SoundOnIcon /> : <SoundOffIcon />}
+        </button>
+      </header>
+
+      {screen === 'home' ? (
+        <div className="window-body">
+          <section className="entry-panel" aria-label={t.signIn}>
+            <div className="entry-body">
+              <h2 className="entry-heading">{t.signIn}</h2>
+
+              <div className="entry-content">
+                <div className="entry-anonymous">
+                  <div className="avatar-wrap">
+                    <div className="avatar">
+                      <img src={character} alt="" />
+                    </div>
+                    <button
+                      type="button"
+                      className="avatar-shuffle"
+                      aria-label={t.pickCharacter}
+                      onClick={() => setCharacter((current) => randomCharacter(current))}
+                    >
+                      <ChangeIcon />
+                    </button>
+                  </div>
+
+                  <div className="entry-fields">
+                    <p>{t.choose}</p>
+                    <input
+                      type="text"
+                      value={nickname}
+                      onChange={(event) => setNickname(event.target.value)}
+                      aria-label={t.nickname}
+                      maxLength={20}
+                    />
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  className="start-button"
+                  onClick={() => setScreen('lobby')}
+                >
+                  <span>{t.start}</span>
+                </button>
+
+                <div className="entry-or" role="separator" aria-label={t.or}>
+                  <span>{t.or}</span>
+                </div>
+
+                <button type="button" className="google-button">
+                  <GoogleIcon />
+                  <span>{t.google}</span>
+                </button>
+              </div>
+            </div>
+          </section>
+
+          <section className="howto-panel" aria-label={t.howToPlay}>
+            <div className="howto-body">
+              <h2 className="howto-title">{t.howToPlay}</h2>
+            </div>
+          </section>
+        </div>
+      ) : (
+        <div className="lobby-body">
+          <section className="lobby-panel players-panel" aria-label={t.players}>
+            <div className="lobby-panel-head">
+              <h2>
+                {t.players}{' '}
+                <span>
+                  {filledSlots}/{capacity}
+                </span>
+              </h2>
+              <label className="capacity-select">
+                <span className="sr-only">{t.players}</span>
+                <select
+                  value={capacity}
+                  onChange={(event) =>
+                    setCapacity(Number(event.target.value) as (typeof playerCapacityOptions)[number])
+                  }
+                >
+                  {playerCapacityOptions.map((count) => (
+                    <option key={count} value={count}>
+                      {t.playersCount(count)}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            </div>
+
+            <ul className="player-list">
+              <li className="player-slot filled">
+                <img src={character} alt="" />
+                <span className="player-name">{nickname || t.nickname}</span>
+                <span className="host-badge" title="Host">
+                  <CrownIcon />
+                </span>
+              </li>
+              {Array.from({ length: capacity - 1 }, (_, index) => (
+                <li key={index} className="player-slot empty">
+                  <EmptyAvatarIcon />
+                  <span className="player-name">{t.empty}</span>
                 </li>
               ))}
             </ul>
-          )}
-        </div>
+          </section>
 
-        <img className="brand-mark" src={logoAndTitle} alt="socceristan" />
-        <div className="top-spacer" aria-hidden="true" />
-      </header>
+          <section className="lobby-panel modes-panel" aria-label={t.presets}>
+            <h2 className="modes-heading">{t.presets}</h2>
 
-      <div className="window-body">
-        <section className="entry-panel" aria-label={t.signIn}>
-          <div className="entry-body">
-            <h2 className="entry-heading">{t.signIn}</h2>
+            <div className="modes-grid">
+              {modes.map((item) => (
+                <button
+                  key={item.id}
+                  type="button"
+                  className={mode === item.id ? 'mode-card active' : 'mode-card'}
+                  onClick={() => setMode(item.id)}
+                >
+                  <span className="mode-icon" aria-hidden="true">
+                    {item.icon}
+                  </span>
+                  <span>{t.modes[item.id]}</span>
+                </button>
+              ))}
+            </div>
 
-            <div className="entry-content">
-              <div className="entry-anonymous">
-                <div className="avatar-wrap" ref={pickerRef}>
-                  <div className="avatar">
-                    <SoccerBall color={ballColor} title={t.pickBall} />
-                  </div>
-                  <button
-                    type="button"
-                    className="avatar-shuffle"
-                    aria-label={t.pickBall}
-                    aria-expanded={pickerOpen}
-                    onClick={() => setPickerOpen((value) => !value)}
-                  >
-                    <ChangeIcon />
-                  </button>
-
-                  {pickerOpen && (
-                    <div className="ball-picker" role="listbox" aria-label={t.pickBall}>
-                      {ballColors.map((color) => (
-                        <button
-                          key={color}
-                          type="button"
-                          role="option"
-                          aria-selected={color === ballColor}
-                          className={color === ballColor ? 'active' : undefined}
-                          onClick={() => {
-                            setBallColor(color)
-                            setPickerOpen(false)
-                          }}
-                        >
-                          <SoccerBall color={color} />
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
-
-                <div className="entry-fields">
-                  <p>{t.choose}</p>
-                  <input
-                    type="text"
-                    value={nickname}
-                    onChange={(event) => setNickname(event.target.value)}
-                    aria-label={t.nickname}
-                    maxLength={20}
-                  />
-                </div>
-              </div>
-
-              <button type="button" className="start-button">
-                <PlayIcon />
-                <span>{t.start}</span>
+            <div className="lobby-actions">
+              <button type="button" className="invite-button">
+                {t.invite}
               </button>
-
-              <div className="entry-or" role="separator" aria-label={t.or}>
-                <span>{t.or}</span>
-              </div>
-
-              <button type="button" className="google-button">
-                <GoogleIcon />
-                <span>{t.google}</span>
+              <button type="button" className="match-start-button">
+                {t.startMatch}
               </button>
             </div>
-          </div>
-        </section>
+          </section>
+        </div>
+      )}
 
-        <section className="howto-panel" aria-label={t.howToPlay}>
-          <div className="howto-body">
-            <h2 className="howto-title">{t.howToPlay}</h2>
-          </div>
-        </section>
-      </div>
-
-      <footer className="window-footer">
-        <span className="footer-brand">rexe games</span>
-        <nav className="footer-links" aria-label="Legal">
-          <a href="#terms">{t.terms}</a>
-          <a href="#privacy">{t.privacy}</a>
-          <a href="#contact">{t.contact}</a>
-        </nav>
-        <span className="footer-credit">by egemenozyurek</span>
-      </footer>
+      {screen === 'home' && (
+        <footer className="window-footer">
+          <span className="footer-brand">rexe games</span>
+          <nav className="footer-links" aria-label="Legal">
+            <a href="#terms">{t.terms}</a>
+            <a href="#privacy">{t.privacy}</a>
+            <a href="#contact">{t.contact}</a>
+          </nav>
+          <span className="footer-credit">by egemenozyurek</span>
+        </footer>
+      )}
     </div>
   )
 }
