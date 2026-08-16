@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type CSSProperties } from 'react'
+import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react'
 import { Navigate, useLocation, useNavigate } from 'react-router-dom'
 import logoAndTitle from './assets/logoAndTitle.svg'
 import bull from './assets/characters/bull.png'
@@ -13,7 +13,7 @@ import './App.css'
 
 type Lang = 'tr' | 'en' | 'de'
 type ModeId =
-  | 'classic'
+  | 'omubumu'
   | 'quick'
   | 'penalty'
   | 'tournament'
@@ -39,16 +39,194 @@ function randomCharacter(exclude?: string) {
   return options[Math.floor(Math.random() * options.length)] ?? characters[0]
 }
 
-const modes: { id: ModeId; icon: string }[] = [
-  { id: 'classic', icon: '⚽' },
-  { id: 'quick', icon: '⚡' },
-  { id: 'penalty', icon: '🥅' },
-  { id: 'tournament', icon: '🏆' },
-  { id: 'friends', icon: '🤝' },
-  { id: 'ranked', icon: '📈' },
-  { id: 'arcade', icon: '🎮' },
-  { id: 'training', icon: '🎯' },
-  { id: 'custom', icon: '⚙️' },
+function ModeIcon({ children }: { children: ReactNode }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      {children}
+    </svg>
+  )
+}
+
+function OmubumuIcon() {
+  return (
+    <ModeIcon>
+      <circle
+        cx="8.25"
+        cy="12"
+        r="5.35"
+        fill="currentColor"
+        fillOpacity="0.2"
+        stroke="currentColor"
+        strokeWidth="1.85"
+      />
+      <circle cx="15.75" cy="12" r="5.35" stroke="currentColor" strokeWidth="1.85" />
+    </ModeIcon>
+  )
+}
+
+function QuickIcon() {
+  return (
+    <ModeIcon>
+      <path
+        d="M13 2 6 13.5h5.5L11 22 18 10.5h-5.5L13 2z"
+        stroke="currentColor"
+        strokeWidth="1.85"
+        strokeLinejoin="round"
+        strokeLinecap="round"
+      />
+    </ModeIcon>
+  )
+}
+
+function PenaltyIcon() {
+  return (
+    <ModeIcon>
+      <path
+        d="M4 19.5V8.2c0-.7.4-1.3 1-1.6L12 3.5l7 3.1c.6.3 1 .9 1 1.6v11.3"
+        stroke="currentColor"
+        strokeWidth="1.85"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M4 19.5h16M8 19.5V12h8v7.5"
+        stroke="currentColor"
+        strokeWidth="1.85"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <circle cx="12" cy="15.2" r="1.35" fill="currentColor" />
+    </ModeIcon>
+  )
+}
+
+function TournamentIcon() {
+  return (
+    <ModeIcon>
+      <path
+        d="M8 4h8v3.2a4 4 0 0 1-8 0V4z"
+        stroke="currentColor"
+        strokeWidth="1.85"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M8 5.2H5.8A2.3 2.3 0 0 0 5.8 9.8M16 5.2h2.2a2.3 2.3 0 0 1 0 4.6"
+        stroke="currentColor"
+        strokeWidth="1.85"
+        strokeLinecap="round"
+      />
+      <path
+        d="M12 11.2v4.3M9.5 19.5h5M12 15.5h0"
+        stroke="currentColor"
+        strokeWidth="1.85"
+        strokeLinecap="round"
+      />
+      <path d="M9.2 19.5h5.6v1.3H9.2z" fill="currentColor" />
+    </ModeIcon>
+  )
+}
+
+function FriendsIcon() {
+  return (
+    <ModeIcon>
+      <circle cx="9" cy="8.2" r="2.6" stroke="currentColor" strokeWidth="1.85" />
+      <circle cx="16.2" cy="9" r="2.1" stroke="currentColor" strokeWidth="1.85" />
+      <path
+        d="M3.8 19c.4-3.1 2.5-4.8 5.2-4.8s4.8 1.7 5.2 4.8"
+        stroke="currentColor"
+        strokeWidth="1.85"
+        strokeLinecap="round"
+      />
+      <path
+        d="M14.2 14.6c1.5-.5 3.2-.3 4.5 1.1.7.8 1.1 1.8 1.3 3.3"
+        stroke="currentColor"
+        strokeWidth="1.85"
+        strokeLinecap="round"
+      />
+    </ModeIcon>
+  )
+}
+
+function RankedIcon() {
+  return (
+    <ModeIcon>
+      <path
+        d="M4.5 16.5 9 11l3.2 3.2L19.5 7"
+        stroke="currentColor"
+        strokeWidth="1.85"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M14.2 7H19.5v5.3"
+        stroke="currentColor"
+        strokeWidth="1.85"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </ModeIcon>
+  )
+}
+
+function ArcadeIcon() {
+  return (
+    <ModeIcon>
+      <rect
+        x="3.5"
+        y="7.5"
+        width="17"
+        height="11"
+        rx="3.2"
+        stroke="currentColor"
+        strokeWidth="1.85"
+      />
+      <circle cx="9" cy="13" r="1.35" fill="currentColor" />
+      <circle cx="15.2" cy="11.6" r="0.85" fill="currentColor" />
+      <circle cx="17.3" cy="13.5" r="0.85" fill="currentColor" />
+      <path
+        d="M8.2 5.8h7.6"
+        stroke="currentColor"
+        strokeWidth="1.85"
+        strokeLinecap="round"
+      />
+    </ModeIcon>
+  )
+}
+
+function TrainingIcon() {
+  return (
+    <ModeIcon>
+      <circle cx="12" cy="12" r="7.2" stroke="currentColor" strokeWidth="1.85" />
+      <circle cx="12" cy="12" r="4.2" stroke="currentColor" strokeWidth="1.85" />
+      <circle cx="12" cy="12" r="1.35" fill="currentColor" />
+    </ModeIcon>
+  )
+}
+
+function CustomIcon() {
+  return (
+    <ModeIcon>
+      <circle cx="12" cy="12" r="3.1" stroke="currentColor" strokeWidth="1.85" />
+      <path
+        d="M12 3.6v2.2M12 18.2v2.2M3.6 12h2.2M18.2 12h2.2M6.1 6.1l1.55 1.55M16.35 16.35l1.55 1.55M17.9 6.1l-1.55 1.55M7.65 16.35l-1.55 1.55"
+        stroke="currentColor"
+        strokeWidth="1.85"
+        strokeLinecap="round"
+      />
+    </ModeIcon>
+  )
+}
+
+const modes: { id: ModeId; icon: ReactNode }[] = [
+  { id: 'omubumu', icon: <OmubumuIcon /> },
+  { id: 'quick', icon: <QuickIcon /> },
+  { id: 'penalty', icon: <PenaltyIcon /> },
+  { id: 'tournament', icon: <TournamentIcon /> },
+  { id: 'friends', icon: <FriendsIcon /> },
+  { id: 'ranked', icon: <RankedIcon /> },
+  { id: 'arcade', icon: <ArcadeIcon /> },
+  { id: 'training', icon: <TrainingIcon /> },
+  { id: 'custom', icon: <CustomIcon /> },
 ]
 
 const copy = {
@@ -74,7 +252,7 @@ const copy = {
     soundOn: 'Sesi aç',
     soundOff: 'Sesi kapat',
     modes: {
-      classic: 'KLASİK',
+      omubumu: 'O MU? BU MU?',
       quick: 'HIZLI',
       penalty: 'PENALTI',
       tournament: 'TURNUVA',
@@ -85,7 +263,7 @@ const copy = {
       custom: 'ÖZEL',
     },
     modeDesc: {
-      classic: 'Standart maç. Zamanlı oynayın veya ilk golü atan kazansın.',
+      omubumu: 'Önüne çıkan iki arasında arkadaşlarınla seçim yap. Kendi istediğini seçmek için jokerlerini kullanmayı unutma.',
       quick: 'Kısa turlar, hızlı skor. Atlayın ve hemen oynayın.',
       penalty: 'Sadece penaltı. Noktadan sırayla şut atın.',
       tournament: 'Birden fazla maçlık bracket turnuvası.',
@@ -118,7 +296,7 @@ const copy = {
     soundOn: 'Unmute sound',
     soundOff: 'Mute sound',
     modes: {
-      classic: 'CLASSIC',
+      omubumu: 'THIS? OR THAT?',
       quick: 'QUICK',
       penalty: 'PENALTY',
       tournament: 'TOURNAMENT',
@@ -129,7 +307,7 @@ const copy = {
       custom: 'CUSTOM',
     },
     modeDesc: {
-      classic: 'Standard match. Play timed or first goal wins.',
+      omubumu: 'Choose with friends between the two options in front of you. Don’t forget to use your jokers to pick what you want.',
       quick: 'Short rounds, fast scoring. Jump in and play.',
       penalty: 'Penalties only. Take turns from the spot.',
       tournament: 'Bracket competition across multiple matches.',
@@ -162,7 +340,7 @@ const copy = {
     soundOn: 'Ton einschalten',
     soundOff: 'Ton ausschalten',
     modes: {
-      classic: 'KLASSISCH',
+      omubumu: 'DIES? ODER DAS?',
       quick: 'SCHNELL',
       penalty: 'ELFMETER',
       tournament: 'TURNIER',
@@ -173,7 +351,7 @@ const copy = {
       custom: 'CUSTOM',
     },
     modeDesc: {
-      classic: 'Standardspiel. Zeitlich oder erstes Tor gewinnt.',
+      omubumu: 'Wählt mit Freunden zwischen den zwei Optionen vor euch. Vergesst nicht, eure Joker zu nutzen, um das Gewünschte zu wählen.',
       quick: 'Kurze Runden, schnelle Tore. Rein und spielen.',
       penalty: 'Nur Elfmeter. Abwechselnd vom Punkt schießen.',
       tournament: 'Bracket-Turnier über mehrere Spiele.',
@@ -358,7 +536,7 @@ function App() {
   const [nickname, setNickname] = useState(() => randomNickname('tr'))
   const [character, setCharacter] = useState(() => randomCharacter())
   const [capacity, setCapacity] = useState<(typeof playerCapacityOptions)[number]>(8)
-  const [mode, setMode] = useState<ModeId>('classic')
+  const [mode, setMode] = useState<ModeId>('omubumu')
   const [soundOn, setSoundOn] = useState(true)
   const menuRef = useRef<HTMLDivElement>(null)
   const t = copy[lang]
