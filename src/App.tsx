@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, type CSSProperties } from 'react'
+import { Navigate, useLocation, useNavigate } from 'react-router-dom'
 import logoAndTitle from './assets/logoAndTitle.svg'
 import bull from './assets/characters/bull.png'
 import cat from './assets/characters/cat.png'
@@ -11,7 +12,6 @@ import snake from './assets/characters/snake.png'
 import './App.css'
 
 type Lang = 'tr' | 'en' | 'de'
-type Screen = 'home' | 'lobby'
 type ModeId =
   | 'classic'
   | 'quick'
@@ -350,7 +350,9 @@ function randomNickname(lang: Lang) {
 }
 
 function App() {
-  const [screen, setScreen] = useState<Screen>('home')
+  const location = useLocation()
+  const navigate = useNavigate()
+  const isLobby = location.pathname === '/mod'
   const [lang, setLang] = useState<Lang>('tr')
   const [open, setOpen] = useState(false)
   const [nickname, setNickname] = useState(() => randomNickname('tr'))
@@ -386,14 +388,18 @@ function App() {
     }
   }, [open])
 
+  if (location.pathname !== '/' && location.pathname !== '/mod') {
+    return <Navigate to="/" replace />
+  }
+
   return (
     <div className="glass-window">
       <header className="window-top">
-        {screen === 'lobby' ? (
+        {isLobby ? (
           <button
             type="button"
             className="back-button"
-            onClick={() => setScreen('home')}
+            onClick={() => navigate('/')}
           >
             <BackIcon />
             <span>{t.back}</span>
@@ -448,7 +454,7 @@ function App() {
         </button>
       </header>
 
-      {screen === 'home' ? (
+      {!isLobby ? (
         <div className="window-body">
           <section className="entry-panel" aria-label={t.signIn}>
             <div className="entry-body">
@@ -485,7 +491,7 @@ function App() {
                 <button
                   type="button"
                   className="start-button"
-                  onClick={() => setScreen('lobby')}
+                  onClick={() => navigate('/mod')}
                 >
                   <span>{t.start}</span>
                 </button>
@@ -594,7 +600,7 @@ function App() {
         </div>
       )}
 
-      {screen === 'home' && (
+      {!isLobby && (
         <footer className="window-footer">
           <span className="footer-brand">rexe games</span>
           <nav className="footer-links" aria-label="Legal">
