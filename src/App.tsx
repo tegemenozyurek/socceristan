@@ -263,7 +263,7 @@ const copy = {
       custom: 'ÖZEL',
     },
     modeDesc: {
-      omubumu: 'Önüne çıkan iki arasında arkadaşlarınla seçim yap. Kendi istediğini seçmek için jokerlerini kullanmayı unutma.',
+      omubumu: 'Öne çıkan ikili arasında arkadaşlarınla seçim yap. Kendi istediğini seçmek için jokerlerini kullanmayı unutma.',
       quick: 'Kısa turlar, hızlı skor. Atlayın ve hemen oynayın.',
       penalty: 'Sadece penaltı. Noktadan sırayla şut atın.',
       tournament: 'Birden fazla maçlık bracket turnuvası.',
@@ -307,7 +307,7 @@ const copy = {
       custom: 'CUSTOM',
     },
     modeDesc: {
-      omubumu: 'Choose with friends between the two options in front of you. Don’t forget to use your jokers to pick what you want.',
+      omubumu: 'Choose with friends between the featured pair. Don’t forget to use your jokers to pick what you want.',
       quick: 'Short rounds, fast scoring. Jump in and play.',
       penalty: 'Penalties only. Take turns from the spot.',
       tournament: 'Bracket competition across multiple matches.',
@@ -351,7 +351,7 @@ const copy = {
       custom: 'CUSTOM',
     },
     modeDesc: {
-      omubumu: 'Wählt mit Freunden zwischen den zwei Optionen vor euch. Vergesst nicht, eure Joker zu nutzen, um das Gewünschte zu wählen.',
+      omubumu: 'Wählt mit Freunden zwischen dem herausgestellten Duo. Vergesst nicht, eure Joker zu nutzen, um das Gewünschte zu wählen.',
       quick: 'Kurze Runden, schnelle Tore. Rein und spielen.',
       penalty: 'Nur Elfmeter. Abwechselnd vom Punkt schießen.',
       tournament: 'Bracket-Turnier über mehrere Spiele.',
