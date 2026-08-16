@@ -456,11 +456,11 @@ function BackIcon() {
   )
 }
 
-function CrownIcon() {
+function HostIcon() {
   return (
     <svg viewBox="0 0 24 24" aria-hidden="true">
       <path
-        d="M4 16 6.5 9l3.5 3.5L12 7l2 5.5L17.5 9 20 16H4z"
+        d="M12 2.8 14.7 9.1l6.8.6-5.2 4.5 1.6 6.6L12 17.4 6.1 20.8l1.6-6.6L2.5 9.7l6.8-.6L12 2.8z"
         fill="currentColor"
       />
     </svg>
@@ -724,7 +724,7 @@ function App() {
                 <img src={character} alt="" />
                 <span className="player-name">{nickname || t.nickname}</span>
                 <span className="host-badge" title="Host">
-                  <CrownIcon />
+                  <HostIcon />
                 </span>
               </li>
               {Array.from({ length: capacity - 1 }, (_, index) => (
