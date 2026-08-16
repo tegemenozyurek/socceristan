@@ -23,6 +23,17 @@ type ModeId =
   | 'training'
   | 'custom'
 
+type OptionId =
+  | 'mixed'
+  | 'sport'
+  | 'music'
+  | 'food'
+  | 'movies'
+  | 'celebs'
+  | 'travel'
+  | 'tech'
+  | 'random'
+
 const languages: { code: Lang; label: string }[] = [
   { code: 'tr', label: 'TR' },
   { code: 'en', label: 'EN' },
@@ -229,6 +240,138 @@ const modes: { id: ModeId; icon: ReactNode }[] = [
   { id: 'custom', icon: <CustomIcon /> },
 ]
 
+function MixedIcon() {
+  return (
+    <ModeIcon>
+      <circle cx="8" cy="9" r="3.2" stroke="currentColor" strokeWidth="1.85" />
+      <circle cx="16" cy="9" r="3.2" stroke="currentColor" strokeWidth="1.85" />
+      <circle cx="12" cy="16.2" r="3.2" stroke="currentColor" strokeWidth="1.85" />
+    </ModeIcon>
+  )
+}
+
+function SportOptionIcon() {
+  return (
+    <ModeIcon>
+      <circle cx="12" cy="12" r="7.2" stroke="currentColor" strokeWidth="1.85" />
+      <path
+        d="M12 4.8v14.4M4.8 12h14.4M7.2 7.2c2.2 2 7.4 2 9.6 0M7.2 16.8c2.2-2 7.4-2 9.6 0"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+      />
+    </ModeIcon>
+  )
+}
+
+function MusicIcon() {
+  return (
+    <ModeIcon>
+      <path
+        d="M9 18.5V7.2l10-2.2v11.3"
+        stroke="currentColor"
+        strokeWidth="1.85"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <circle cx="7" cy="18.5" r="2.2" stroke="currentColor" strokeWidth="1.85" />
+      <circle cx="17" cy="16.3" r="2.2" stroke="currentColor" strokeWidth="1.85" />
+    </ModeIcon>
+  )
+}
+
+function FoodIcon() {
+  return (
+    <ModeIcon>
+      <path
+        d="M7 4.5v7.2c0 2.2 1.8 3.5 5 3.5s5-1.3 5-3.5V4.5"
+        stroke="currentColor"
+        strokeWidth="1.85"
+        strokeLinecap="round"
+      />
+      <path d="M12 15.2v4.3M8.5 19.5h7" stroke="currentColor" strokeWidth="1.85" strokeLinecap="round" />
+      <path d="M9.2 4.5v5M12 4.5v5M14.8 4.5v5" stroke="currentColor" strokeWidth="1.85" strokeLinecap="round" />
+    </ModeIcon>
+  )
+}
+
+function MoviesIcon() {
+  return (
+    <ModeIcon>
+      <rect x="3.5" y="6" width="17" height="12" rx="2.2" stroke="currentColor" strokeWidth="1.85" />
+      <path d="M3.5 9h17M3.5 15h17M7 6v12M17 6v12" stroke="currentColor" strokeWidth="1.6" />
+    </ModeIcon>
+  )
+}
+
+function CelebsIcon() {
+  return (
+    <ModeIcon>
+      <circle cx="12" cy="8.5" r="3" stroke="currentColor" strokeWidth="1.85" />
+      <path
+        d="M5.5 19.5c.6-3.4 2.8-5.2 6.5-5.2s5.9 1.8 6.5 5.2"
+        stroke="currentColor"
+        strokeWidth="1.85"
+        strokeLinecap="round"
+      />
+      <path
+        d="M12 2.8 13.2 5.4l2.8.3-2.1 2 0.6 2.8L12 9.2 9.5 10.5l0.6-2.8-2.1-2 2.8-.3L12 2.8z"
+        fill="currentColor"
+      />
+    </ModeIcon>
+  )
+}
+
+function TravelIcon() {
+  return (
+    <ModeIcon>
+      <path
+        d="M3.5 16.5 12 4.5l8.5 12"
+        stroke="currentColor"
+        strokeWidth="1.85"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path d="M7.2 16.5h9.6M12 4.5v5.5" stroke="currentColor" strokeWidth="1.85" strokeLinecap="round" />
+      <circle cx="12" cy="12.5" r="1.2" fill="currentColor" />
+    </ModeIcon>
+  )
+}
+
+function TechIcon() {
+  return (
+    <ModeIcon>
+      <rect x="5" y="4.5" width="14" height="11.5" rx="1.8" stroke="currentColor" strokeWidth="1.85" />
+      <path d="M9 19.5h6M12 16v3.5" stroke="currentColor" strokeWidth="1.85" strokeLinecap="round" />
+    </ModeIcon>
+  )
+}
+
+function RandomIcon() {
+  return (
+    <ModeIcon>
+      <rect x="4" y="4" width="16" height="16" rx="3.2" stroke="currentColor" strokeWidth="1.85" />
+      <circle cx="8.5" cy="8.5" r="1.2" fill="currentColor" />
+      <circle cx="15.5" cy="8.5" r="1.2" fill="currentColor" />
+      <circle cx="12" cy="12" r="1.2" fill="currentColor" />
+      <circle cx="8.5" cy="15.5" r="1.2" fill="currentColor" />
+      <circle cx="15.5" cy="15.5" r="1.2" fill="currentColor" />
+    </ModeIcon>
+  )
+}
+
+const omubumuOptions: { id: OptionId; icon: ReactNode }[] = [
+  { id: 'mixed', icon: <MixedIcon /> },
+  { id: 'sport', icon: <SportOptionIcon /> },
+  { id: 'music', icon: <MusicIcon /> },
+  { id: 'food', icon: <FoodIcon /> },
+  { id: 'movies', icon: <MoviesIcon /> },
+  { id: 'celebs', icon: <CelebsIcon /> },
+  { id: 'travel', icon: <TravelIcon /> },
+  { id: 'tech', icon: <TechIcon /> },
+  { id: 'random', icon: <RandomIcon /> },
+]
+
 const copy = {
   tr: {
     signIn: 'GİRİŞ YAP',
@@ -248,6 +391,30 @@ const copy = {
     presets: 'MODLAR',
     invite: 'DAVET ET',
     startMatch: 'BAŞLAT',
+    next: 'SIRADAKI',
+    options: 'SEÇENEKLER',
+    optionsList: {
+      mixed: 'KARIŞIK',
+      sport: 'SPOR',
+      music: 'MÜZİK',
+      food: 'YEMEK',
+      movies: 'FİLM',
+      celebs: 'ÜNLÜLER',
+      travel: 'SEYAHAT',
+      tech: 'TEKNOLOJİ',
+      random: 'ŞANS',
+    },
+    optionDesc: {
+      mixed: 'Her turda farklı kategorilerden ikililer gelir.',
+      sport: 'Sporcular, takımlar ve maçlar üzerine seçimler.',
+      music: 'Şarkılar, sanatçılar ve müzik tarzları.',
+      food: 'Yemekler, tatlar ve restoran ikilemleri.',
+      movies: 'Filmler, diziler ve karakterler.',
+      celebs: 'Ünlüler, fenomenler ve gündem.',
+      travel: 'Şehirler, ülkeler ve tatil seçimleri.',
+      tech: 'Uygulamalar, cihazlar ve teknoloji.',
+      random: 'Tamamen rastgele ikililer. Sürpriz dolu.',
+    },
     playersCount: (n: number) => `${n} OYUNCU`,
     soundOn: 'Sesi aç',
     soundOff: 'Sesi kapat',
@@ -292,6 +459,30 @@ const copy = {
     presets: 'MODES',
     invite: 'INVITE',
     startMatch: 'START',
+    next: 'NEXT',
+    options: 'OPTIONS',
+    optionsList: {
+      mixed: 'MIXED',
+      sport: 'SPORTS',
+      music: 'MUSIC',
+      food: 'FOOD',
+      movies: 'MOVIES',
+      celebs: 'CELEBS',
+      travel: 'TRAVEL',
+      tech: 'TECH',
+      random: 'RANDOM',
+    },
+    optionDesc: {
+      mixed: 'Pairs from different categories each round.',
+      sport: 'Athletes, teams, and match dilemmas.',
+      music: 'Songs, artists, and music styles.',
+      food: 'Dishes, tastes, and restaurant picks.',
+      movies: 'Films, shows, and characters.',
+      celebs: 'Celebrities, influencers, and trends.',
+      travel: 'Cities, countries, and trip choices.',
+      tech: 'Apps, devices, and technology.',
+      random: 'Fully random pairs. Full of surprises.',
+    },
     playersCount: (n: number) => `${n} PLAYERS`,
     soundOn: 'Unmute sound',
     soundOff: 'Mute sound',
@@ -336,6 +527,30 @@ const copy = {
     presets: 'MODI',
     invite: 'EINLADEN',
     startMatch: 'START',
+    next: 'WEITER',
+    options: 'OPTIONEN',
+    optionsList: {
+      mixed: 'GEMISCHT',
+      sport: 'SPORT',
+      music: 'MUSIK',
+      food: 'ESSEN',
+      movies: 'FILME',
+      celebs: 'STARS',
+      travel: 'REISEN',
+      tech: 'TECHNIK',
+      random: 'ZUFALL',
+    },
+    optionDesc: {
+      mixed: 'Jedes Runde Paare aus verschiedenen Kategorien.',
+      sport: 'Sportler, Teams und Match-Dilemmata.',
+      music: 'Songs, Künstler und Musikstile.',
+      food: 'Gerichte, Geschmäcker und Restaurant-Picks.',
+      movies: 'Filme, Serien und Charaktere.',
+      celebs: 'Promis, Influencer und Trends.',
+      travel: 'Städte, Länder und Reise-Entscheidungen.',
+      tech: 'Apps, Geräte und Technologie.',
+      random: 'Völlig zufällige Paare. Voller Überraschungen.',
+    },
     playersCount: (n: number) => `${n} SPIELER`,
     soundOn: 'Ton einschalten',
     soundOff: 'Ton ausschalten',
@@ -530,13 +745,15 @@ function randomNickname(lang: Lang) {
 function App() {
   const location = useLocation()
   const navigate = useNavigate()
-  const isLobby = location.pathname === '/mod'
+  const isSetup = location.pathname === '/mod/omubumu'
+  const isLobby = location.pathname === '/mod' || isSetup
   const [lang, setLang] = useState<Lang>('tr')
   const [open, setOpen] = useState(false)
   const [nickname, setNickname] = useState(() => randomNickname('tr'))
   const [character, setCharacter] = useState(() => randomCharacter())
   const [capacity, setCapacity] = useState<(typeof playerCapacityOptions)[number]>(8)
   const [mode, setMode] = useState<ModeId>('omubumu')
+  const [option, setOption] = useState<OptionId>('mixed')
   const [soundOn, setSoundOn] = useState(true)
   const menuRef = useRef<HTMLDivElement>(null)
   const t = copy[lang]
@@ -566,7 +783,11 @@ function App() {
     }
   }, [open])
 
-  if (location.pathname !== '/' && location.pathname !== '/mod') {
+  if (
+    location.pathname !== '/' &&
+    location.pathname !== '/mod' &&
+    location.pathname !== '/mod/omubumu'
+  ) {
     return <Navigate to="/" replace />
   }
 
@@ -577,7 +798,7 @@ function App() {
           <button
             type="button"
             className="back-button"
-            onClick={() => navigate('/')}
+            onClick={() => navigate(isSetup ? '/mod' : '/')}
           >
             <BackIcon />
             <span>{t.back}</span>
@@ -740,41 +961,89 @@ function App() {
             </ul>
           </section>
 
-          <section className="lobby-panel modes-panel" aria-label={t.presets}>
-            <h2 className="modes-heading">{t.presets}</h2>
+          {isSetup ? (
+            <section className="lobby-panel modes-panel" aria-label={t.options}>
+              <h2 className="modes-heading">{t.options}</h2>
 
-            <div className="modes-grid">
-              {modes.map((item, index) => (
-                <button
-                  key={item.id}
-                  type="button"
-                  className={mode === item.id ? 'mode-card active' : 'mode-card'}
-                  style={{ '--i': index } as CSSProperties}
-                  onClick={() => setMode(item.id)}
-                >
-                  <span className="mode-face mode-face-default">
-                    <span className="mode-icon" aria-hidden="true">
-                      {item.icon}
+              <div className="modes-grid">
+                {omubumuOptions.map((item, index) => (
+                  <button
+                    key={item.id}
+                    type="button"
+                    className={option === item.id ? 'mode-card active' : 'mode-card'}
+                    style={{ '--i': index } as CSSProperties}
+                    onClick={() => setOption(item.id)}
+                  >
+                    <span className="mode-face mode-face-default">
+                      <span className="mode-icon" aria-hidden="true">
+                        {item.icon}
+                      </span>
+                      <span className="mode-title">{t.optionsList[item.id]}</span>
                     </span>
-                    <span className="mode-title">{t.modes[item.id]}</span>
-                  </span>
-                  <span className="mode-face mode-face-detail" aria-hidden="true">
-                    <span className="mode-title">{t.modes[item.id]}</span>
-                    <span className="mode-desc">{t.modeDesc[item.id]}</span>
-                  </span>
-                </button>
-              ))}
-            </div>
+                    <span className="mode-face mode-face-detail" aria-hidden="true">
+                      <span className="mode-title">{t.optionsList[item.id]}</span>
+                      <span className="mode-desc">{t.optionDesc[item.id]}</span>
+                    </span>
+                  </button>
+                ))}
+              </div>
 
-            <div className="lobby-actions">
-              <button type="button" className="invite-button">
-                {t.invite}
-              </button>
-              <button type="button" className="match-start-button">
-                {t.startMatch}
-              </button>
-            </div>
-          </section>
+              <div className="lobby-actions">
+                <button
+                  type="button"
+                  className="invite-button"
+                  onClick={() => navigate('/mod')}
+                >
+                  {t.back}
+                </button>
+                <button type="button" className="match-start-button">
+                  {t.next}
+                </button>
+              </div>
+            </section>
+          ) : (
+            <section className="lobby-panel modes-panel" aria-label={t.presets}>
+              <h2 className="modes-heading">{t.presets}</h2>
+
+              <div className="modes-grid">
+                {modes.map((item, index) => (
+                  <button
+                    key={item.id}
+                    type="button"
+                    className={mode === item.id ? 'mode-card active' : 'mode-card'}
+                    style={{ '--i': index } as CSSProperties}
+                    onClick={() => setMode(item.id)}
+                  >
+                    <span className="mode-face mode-face-default">
+                      <span className="mode-icon" aria-hidden="true">
+                        {item.icon}
+                      </span>
+                      <span className="mode-title">{t.modes[item.id]}</span>
+                    </span>
+                    <span className="mode-face mode-face-detail" aria-hidden="true">
+                      <span className="mode-title">{t.modes[item.id]}</span>
+                      <span className="mode-desc">{t.modeDesc[item.id]}</span>
+                    </span>
+                  </button>
+                ))}
+              </div>
+
+              <div className="lobby-actions">
+                <button type="button" className="invite-button">
+                  {t.invite}
+                </button>
+                <button
+                  type="button"
+                  className="match-start-button"
+                  onClick={() => {
+                    if (mode === 'omubumu') navigate('/mod/omubumu')
+                  }}
+                >
+                  {mode === 'omubumu' ? t.next : t.startMatch}
+                </button>
+              </div>
+            </section>
+          )}
         </div>
       )}
 

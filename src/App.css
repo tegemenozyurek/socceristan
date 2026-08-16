@@ -792,6 +792,10 @@
   animation-delay: 780ms;
 }
 
+.lobby-actions-single {
+  grid-template-columns: 1fr;
+}
+
 .invite-button,
 .match-start-button {
   height: 2.9rem;
