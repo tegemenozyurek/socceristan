@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, type CSSProperties } from 'react'
 import logoAndTitle from './assets/logoAndTitle.svg'
 import bull from './assets/characters/bull.png'
 import cat from './assets/characters/cat.png'
@@ -536,7 +536,7 @@ function App() {
             </div>
 
             <ul className="player-list">
-              <li className="player-slot filled">
+              <li className="player-slot filled" style={{ '--slot': 0 } as CSSProperties}>
                 <img src={character} alt="" />
                 <span className="player-name">{nickname || t.nickname}</span>
                 <span className="host-badge" title="Host">
@@ -544,7 +544,11 @@ function App() {
                 </span>
               </li>
               {Array.from({ length: capacity - 1 }, (_, index) => (
-                <li key={index} className="player-slot empty">
+                <li
+                  key={index}
+                  className="player-slot empty"
+                  style={{ '--slot': index + 1 } as CSSProperties}
+                >
                   <EmptyAvatarIcon />
                   <span className="player-name">{t.empty}</span>
                 </li>
@@ -556,11 +560,12 @@ function App() {
             <h2 className="modes-heading">{t.presets}</h2>
 
             <div className="modes-grid">
-              {modes.map((item) => (
+              {modes.map((item, index) => (
                 <button
                   key={item.id}
                   type="button"
                   className={mode === item.id ? 'mode-card active' : 'mode-card'}
+                  style={{ '--i': index } as CSSProperties}
                   onClick={() => setMode(item.id)}
                 >
                   <span className="mode-face mode-face-default">
